@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E21BECEE1DF810B3000BBE67 /* MBETextureDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = E21BECED1DF810B3000BBE67 /* MBETextureDataSource.m */; };
+		E21BECF01DF81424000BBE67 /* textures.json in Resources */ = {isa = PBXBuildFile; fileRef = E21BECEF1DF81424000BBE67 /* textures.json */; };
+		E21BECF41DF81EAC000BBE67 /* Shaders1.metal in Sources */ = {isa = PBXBuildFile; fileRef = E21BECF31DF81EAC000BBE67 /* Shaders1.metal */; };
 		E2491B471DF65F7F002BD130 /* MetalButtoonMesh.m in Sources */ = {isa = PBXBuildFile; fileRef = E2491B461DF65F7F002BD130 /* MetalButtoonMesh.m */; };
 		E2491B4E1DF66C59002BD130 /* cinema_0102_back.png in Resources */ = {isa = PBXBuildFile; fileRef = E2491B481DF66C59002BD130 /* cinema_0102_back.png */; };
 		E2491B4F1DF66C59002BD130 /* cinema_0102_down.png in Resources */ = {isa = PBXBuildFile; fileRef = E2491B491DF66C59002BD130 /* cinema_0102_down.png */; };
@@ -71,6 +74,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E21BECEC1DF810B3000BBE67 /* MBETextureDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBETextureDataSource.h; sourceTree = "<group>"; };
+		E21BECED1DF810B3000BBE67 /* MBETextureDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBETextureDataSource.m; sourceTree = "<group>"; };
+		E21BECEF1DF81424000BBE67 /* textures.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = textures.json; sourceTree = "<group>"; };
+		E21BECF31DF81EAC000BBE67 /* Shaders1.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders1.metal; sourceTree = "<group>"; };
 		E2491B451DF65F7F002BD130 /* MetalButtonMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetalButtonMesh.h; sourceTree = "<group>"; };
 		E2491B461DF65F7F002BD130 /* MetalButtoonMesh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MetalButtoonMesh.m; sourceTree = "<group>"; };
 		E2491B481DF66C59002BD130 /* cinema_0102_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cinema_0102_back.png; sourceTree = "<group>"; };
@@ -219,6 +226,7 @@
 				E2940FC51DF7C0EC0083923C /* modelIORender.h */,
 				E2940FC61DF7C0EC0083923C /* modelIORender.m */,
 				E24E43C71DF572A2005FD866 /* Shaders.metal */,
+				E21BECF31DF81EAC000BBE67 /* Shaders1.metal */,
 				E2940FC01DF7B57E0083923C /* model_io.metal */,
 				E24E43BA1DF56BB8005FD866 /* Utilities */,
 				E24E43B81DF56BB8005FD866 /* Geometry */,
@@ -298,10 +306,13 @@
 		E24E43BA1DF56BB8005FD866 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				E21BECEF1DF81424000BBE67 /* textures.json */,
 				E24E43BB1DF56BD5005FD866 /* MetalTextureLoader.h */,
 				E24E43BC1DF56BD5005FD866 /* MetalTextureLoader.m */,
 				E24E43BE1DF56BEA005FD866 /* MetalMatrixUtilities.h */,
 				E24E43BF1DF56BEA005FD866 /* MetalMatrixUtilities.m */,
+				E21BECEC1DF810B3000BBE67 /* MBETextureDataSource.h */,
+				E21BECED1DF810B3000BBE67 /* MBETextureDataSource.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -414,6 +425,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2491B4F1DF66C59002BD130 /* cinema_0102_down.png in Resources */,
+				E21BECF01DF81424000BBE67 /* textures.json in Resources */,
 				E2491B711DF6AD7B002BD130 /* movie_play_pause.png in Resources */,
 				E2491B721DF6AD7B002BD130 /* movie_play_pause_CLICK.png in Resources */,
 				E2491B531DF66C59002BD130 /* cinema_0102_up.png in Resources */,
@@ -470,6 +482,7 @@
 				E2491B471DF65F7F002BD130 /* MetalButtoonMesh.m in Sources */,
 				E24E437F1DF5652E005FD866 /* AppDelegate.m in Sources */,
 				E24E437C1DF5652E005FD866 /* main.m in Sources */,
+				E21BECF41DF81EAC000BBE67 /* Shaders1.metal in Sources */,
 				E24E43C01DF56BEA005FD866 /* MetalMatrixUtilities.m in Sources */,
 				E2491B7B1DF6BA0E002BD130 /* MetalBall.m in Sources */,
 				E24E43C61DF56C15005FD866 /* MetalSkyMesh.m in Sources */,
@@ -479,6 +492,7 @@
 				E2940FCB1DF7E9BB0083923C /* NewViewController.m in Sources */,
 				E24E43C31DF56C05005FD866 /* MetalMesh.m in Sources */,
 				E24E43B71DF56A2B005FD866 /* MetalRender.m in Sources */,
+				E21BECEE1DF810B3000BBE67 /* MBETextureDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

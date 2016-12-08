@@ -40,10 +40,11 @@ static uint16_t indices[] =
 // 开始按钮
 static float startVertices[] = {
     // 纹理
-     0.6,   -0.1,  1,  1, 0,
+     0.6,  -0.1,  1,  1, 0,
      0.7,  -0.1,  1,  0, 0,
      0.7,   0.0,  1,  0, 1,
      0.6,   0.0,  1,  1, 1,
+    
 };
 
 static uint16_t startIndices[] =

@@ -13,15 +13,18 @@
 #import "Types.h"
 #import "MetalButtonMesh.h"
 #import "MetalBall.h"
+#import "MBETextureDataSource.h"
 
 @interface MetalRender()
 @property (nonatomic, strong) id<MTLCommandQueue> commandQueue;
 @property (nonatomic, strong) id<MTLLibrary> library;
 @property (nonatomic, strong) id<MTLRenderPipelineState> skyboxPipeline;
 @property (nonatomic, strong) id<MTLRenderPipelineState> screenPipeline;
+@property (nonatomic, strong) id<MTLRenderPipelineState> startPipeline;
 @property (nonatomic, strong) id<MTLBuffer> uniformBuffer;
 @property (nonatomic, strong) id<MTLTexture> depthTexture;
 @property (nonatomic, strong) id<MTLTexture> cubeTexture;
+
 // TODO
 @property (nonatomic, strong) id<MTLTexture> screenTexture;
 @property (nonatomic, strong) id<MTLTexture> startTexture;
@@ -144,15 +147,17 @@
 // 渲染管道设置
 - (void)buildPipelines
 {
-    self.ballMesh = [[MetalBall alloc] init];
-    [self.ballMesh initWithDevice:self.device xExtent:100 yExtent:1 zExtent:64 uTesselation:64 vTesselation:64];
-    self.ballTexture = [MetalTextureLoader texture2DWithImageNamed:@"px" device:self.device];
+//    self.ballMesh = [[MetalBall alloc] init];
+//    [self.ballMesh initWithDevice:self.device xExtent:100 yExtent:1 zExtent:64 uTesselation:64 vTesselation:64];
+//    self.ballTexture = [MetalTextureLoader texture2DWithImageNamed:@"px" device:self.device];
     // 天空盒
     self.skyboxPipeline = [self pipelineForVertexFunctionNamed:@"vertex_skybox"
                                          fragmentFunctionNamed:@"fragment_cube_lookup"];
     self.screenPipeline = [self pipeline2DForVertexFunction:@"texture_vertex" fragmentFunction:@"texture_fragment"];
     
-    self.ballPipelineState = [self pipelineBallForVertexFunction:@"showMIOVertexShader" fragmentFunction:@"showMIOFragmentShader"];
+    self.startPipeline = [self pipeline2DForVertexFunction:@"vertex_main" fragmentFunction:@"fragment_main"];
+    
+//    self.ballPipelineState = [self pipelineBallForVertexFunction:@"showMIOVertexShader" fragmentFunction:@"showMIOFragmentShader"];
 }
 
 //  设置资源
@@ -173,7 +178,8 @@
     self.screenTexture = [MetalTextureLoader texture2DWithImageNamed:@"py" device:self.device];
     
     self.startMesh = [[MetalButtonMesh alloc] initWithStartDevice:self.device];
-    self.startTexture = [MetalTextureLoader texture2DWithImageNamed:@"movie_play_advance_CLICK" device:self.device];
+//    self.startTexture = [MetalTextureLoader texture2DWithImageNamed:@"movie_play_advance_CLICK" device:self.device];
+    [self buildTexture];
     // 设置矩阵数据
     self.uniformBuffer = [self.device newBufferWithLength:sizeof(SkyUniforms) * 2
                                                   options:MTLResourceOptionCPUCacheModeDefault];
@@ -185,6 +191,31 @@
     self.samplerState = [self.device newSamplerStateWithDescriptor:samplerDescriptor];
 
 }
+
+- (void)buildTexture {
+    NSString *fileName = @"movie_play_advance";
+    NSURL *fileURL = [[NSBundle mainBundle] URLForResource:fileName withExtension:@"png"];
+    NSString *label = @"PNG";
+        if (fileURL) {
+        NSLog(@"%@", fileName);
+        MBETextureDataSource *textureSource = [MBETextureDataSource textureDataSourceWithContentsOfURL:fileURL];
+
+        id<MTLTexture> texture = [textureSource newTextureWithCommandQueue:self.commandQueue generateMipmaps:YES];
+        
+        if (texture)
+        {
+            [texture setLabel:label];
+        }
+        else
+        {
+            NSLog(@"Failed when creating texture named %@ (%@)", label, fileName);
+        }
+        
+        self.startTexture = texture;
+    }
+    
+}
+
 
 
 - (void)buildDepthBuffer
@@ -267,14 +298,15 @@
     // 通过将MTLDepthStencilDescriptor的depthWriteEnabled设置为NO来禁止深度写入
     depthDescriptor.depthWriteEnabled = NO;
     id <MTLDepthStencilState> depthState = [self.device newDepthStencilStateWithDescriptor:depthDescriptor];
-    
-    [commandEncoder setRenderPipelineState:self.screenPipeline];
+    [commandEncoder setCullMode:(MTLCullModeNone)];
+    [commandEncoder setRenderPipelineState:self.startPipeline];
     [commandEncoder setDepthStencilState:depthState];
     [commandEncoder setVertexBuffer:self.startMesh.vertexBuffer offset:0 atIndex:0];
     
     // TODO
     [commandEncoder setFragmentTexture:self.startTexture atIndex:0];
-    //    [commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
+     [commandEncoder setFragmentSamplerState:self.samplerState atIndex:0];
+//        [commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
     //    [commandEncoder drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:6];
     [commandEncoder drawIndexedPrimitives:(MTLPrimitiveTypeTriangle) indexCount:[self.startMesh.indexBuffer length] / sizeof(UInt16) indexType:MTLIndexTypeUInt16 indexBuffer:self.startMesh.indexBuffer indexBufferOffset:0];
     
