@@ -12,22 +12,28 @@
 #import "MetalMatrixUtilities.h"
 #import "Types.h"
 #import "MetalButtonMesh.h"
-#import "MetalBall.h"
-#import "MBETextureDataSource.h"
+#import "StringToImage.h"
 
 @interface MetalRender()
 @property (nonatomic, strong) id<MTLCommandQueue> commandQueue;
 @property (nonatomic, strong) id<MTLLibrary> library;
 @property (nonatomic, strong) id<MTLRenderPipelineState> skyboxPipeline;
 @property (nonatomic, strong) id<MTLRenderPipelineState> screenPipeline;
-@property (nonatomic, strong) id<MTLRenderPipelineState> startPipeline;
+@property (nonatomic, strong) id<MTLRenderPipelineState> buttonPipeline;
 @property (nonatomic, strong) id<MTLBuffer> uniformBuffer;
 @property (nonatomic, strong) id<MTLTexture> depthTexture;
 @property (nonatomic, strong) id<MTLTexture> cubeTexture;
 
 // TODO
 @property (nonatomic, strong) id<MTLTexture> screenTexture;
+@property (nonatomic, strong) id<MTLTexture> nextTexture;
 @property (nonatomic, strong) id<MTLTexture> startTexture;
+@property (nonatomic, strong) id<MTLTexture> preTexture;
+@property (nonatomic, strong) id<MTLTexture> progressTexture;
+@property (nonatomic, strong) id<MTLTexture> rightTexture;
+@property (nonatomic, strong) id<MTLTexture> leftTexture;
+@property (nonatomic, strong) id<MTLTexture> spotTexture;
+
 // 为单个设备编译的不可变的采样器状态集合
 @property (nonatomic, strong) id<MTLSamplerState> samplerState;
 // 天空盒网格
@@ -35,16 +41,17 @@
 
 // TODO
 @property (nonatomic, strong) MetalButtonMesh *screenMesh;
-@property (nonatomic, strong) MetalButtonMesh *startMesh;
+@property (nonatomic, strong) MetalButtonMesh *nextButtonMesh;
+@property (nonatomic, strong) MetalButtonMesh *startButtonMesh;
+@property (nonatomic, strong) MetalButtonMesh *preButtonMesh;
+@property (nonatomic, strong) MetalButtonMesh *progressButtonMesh;
+@property (nonatomic, strong) MetalButtonMesh *rightLabelMesh;
+@property (nonatomic, strong) MetalButtonMesh *leftLabelMesh;
+@property (nonatomic, strong) MetalButtonMesh *spotMesh;
+
+
 // 旋转角度
 @property (nonatomic, assign) CGFloat rotationAngle;
-
-
-// TODO Mesh
-@property (nonatomic, strong)MetalBall *ballMesh;
-@property (nonatomic, strong)id<MTLTexture> ballTexture;
-@property (nonatomic, strong)id<MTLRenderPipelineState> ballPipelineState;
-
 
 @end
 
@@ -104,8 +111,6 @@
 
 
 - (id<MTLRenderPipelineState>)pipeline2DForVertexFunction:(NSString *)vertexFunction fragmentFunction:(NSString *)fragFunction {
-
-    
     MTLRenderPipelineDescriptor *pipelineDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
     pipelineDescriptor.vertexFunction = [_library newFunctionWithName:vertexFunction];
     pipelineDescriptor.fragmentFunction = [_library newFunctionWithName:fragFunction];
@@ -118,46 +123,19 @@
     {
         NSLog(@"Error occurred while creating render pipeline: %@", error);
     }
-    
     return pipeline;
-
-}
-
-- (id<MTLRenderPipelineState>)pipelineBallForVertexFunction:(NSString *)vertexFunction fragmentFunction:(NSString *)fragFunction {
-    
-    
-    MTLRenderPipelineDescriptor *pipelineDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
-    pipelineDescriptor.vertexFunction = [_library newFunctionWithName:vertexFunction];
-    pipelineDescriptor.fragmentFunction = [_library newFunctionWithName:fragFunction];
-    pipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
-    pipelineDescriptor.depthAttachmentPixelFormat = MTLPixelFormatDepth32Float;
-    pipelineDescriptor.vertexDescriptor = self.ballMesh.metalVertexDescriptor;
-    
-    NSError *error = nil;
-    id<MTLRenderPipelineState> pipeline = [_device newRenderPipelineStateWithDescriptor:pipelineDescriptor error:&error];
-    if (!pipeline)
-    {
-        NSLog(@"Error occurred while creating render pipeline: %@", error);
-    }
-    
-    return pipeline;
-    
 }
 
 // 渲染管道设置
 - (void)buildPipelines
 {
-//    self.ballMesh = [[MetalBall alloc] init];
-//    [self.ballMesh initWithDevice:self.device xExtent:100 yExtent:1 zExtent:64 uTesselation:64 vTesselation:64];
-//    self.ballTexture = [MetalTextureLoader texture2DWithImageNamed:@"px" device:self.device];
     // 天空盒
     self.skyboxPipeline = [self pipelineForVertexFunctionNamed:@"vertex_skybox"
                                          fragmentFunctionNamed:@"fragment_cube_lookup"];
     self.screenPipeline = [self pipeline2DForVertexFunction:@"texture_vertex" fragmentFunction:@"texture_fragment"];
     
-    self.startPipeline = [self pipeline2DForVertexFunction:@"vertex_main" fragmentFunction:@"fragment_main"];
-    
-//    self.ballPipelineState = [self pipelineBallForVertexFunction:@"showMIOVertexShader" fragmentFunction:@"showMIOFragmentShader"];
+    self.buttonPipeline = [self pipeline2DForVertexFunction:@"texture_vertex" fragmentFunction:@"button_fragment"];
+
 }
 
 //  设置资源
@@ -177,9 +155,36 @@
     self.screenMesh = [[MetalButtonMesh alloc] initWithDevice:self.device];
     self.screenTexture = [MetalTextureLoader texture2DWithImageNamed:@"py" device:self.device];
     
-    self.startMesh = [[MetalButtonMesh alloc] initWithStartDevice:self.device];
-//    self.startTexture = [MetalTextureLoader texture2DWithImageNamed:@"movie_play_advance_CLICK" device:self.device];
-    [self buildTexture];
+    // 开始
+    self.startButtonMesh = [[MetalButtonMesh alloc] initWithStartDevice:self.device];
+    self.startTexture = [MetalTextureLoader texture2DWithImageNamed:@"movie_player_play" device:self.device];
+    
+    // 上一首
+    self.preButtonMesh = [[MetalButtonMesh alloc] initWithPretDevice:self.device];
+    self.preTexture = [MetalTextureLoader texture2DWithImageNamed:@"movie_play_rewind" device:self.device];
+    
+    // 下一首
+    self.nextButtonMesh = [[MetalButtonMesh alloc] initWithNextDevice:self.device];
+    self.nextTexture = [MetalTextureLoader texture2DWithImageNamed:@"movie_play_advance_CLICK" device:self.device];
+    
+    // 进度条
+    self.progressButtonMesh = [[MetalButtonMesh alloc] initWithProgresstDevice:self.device];
+    self.progressTexture = [MetalTextureLoader texture2DWithImageNamed:@"movie_rate" device:self.device];
+    // 时间显示
+    self.rightLabelMesh = [[MetalButtonMesh alloc] initWithRightLabelDevice:self.device];
+    UIImage *image = [StringToImage imageFromString:@"09:58:60" withFont:20];
+    self.rightTexture = [MetalTextureLoader texture2DWithImage:image device:self.device];
+    
+    //
+    self.leftLabelMesh = [[MetalButtonMesh alloc] initWithLeftLabelDevice:self.device];
+    UIImage *leftImage = [StringToImage imageFromString:@"00:00:00" withFont:20];
+    self.leftTexture = [MetalTextureLoader texture2DWithImage:leftImage device:self.device];
+    
+    // 焦点
+    self.spotMesh = [[MetalButtonMesh alloc] initWithSpotDevice:self.device];
+    self.spotTexture = [MetalTextureLoader texture2DWithImageNamed:@"spot" device:self.device];
+
+    
     // 设置矩阵数据
     self.uniformBuffer = [self.device newBufferWithLength:sizeof(SkyUniforms) * 2
                                                   options:MTLResourceOptionCPUCacheModeDefault];
@@ -189,33 +194,7 @@
     samplerDescriptor.magFilter = MTLSamplerMinMagFilterLinear;
     // 设置采样器集合
     self.samplerState = [self.device newSamplerStateWithDescriptor:samplerDescriptor];
-
 }
-
-- (void)buildTexture {
-    NSString *fileName = @"movie_play_advance";
-    NSURL *fileURL = [[NSBundle mainBundle] URLForResource:fileName withExtension:@"png"];
-    NSString *label = @"PNG";
-        if (fileURL) {
-        NSLog(@"%@", fileName);
-        MBETextureDataSource *textureSource = [MBETextureDataSource textureDataSourceWithContentsOfURL:fileURL];
-
-        id<MTLTexture> texture = [textureSource newTextureWithCommandQueue:self.commandQueue generateMipmaps:YES];
-        
-        if (texture)
-        {
-            [texture setLabel:label];
-        }
-        else
-        {
-            NSLog(@"Failed when creating texture named %@ (%@)", label, fileName);
-        }
-        
-        self.startTexture = texture;
-    }
-    
-}
-
 
 
 - (void)buildDepthBuffer
@@ -259,73 +238,105 @@
 
 // 绘制屏幕
 - (void)drawScreenWithCommandEncoder:(id<MTLRenderCommandEncoder>)commandEncoder {
-
-    // 深度缓存器
-    MTLDepthStencilDescriptor *depthDescriptor = [MTLDepthStencilDescriptor new];
-    depthDescriptor.depthCompareFunction = MTLCompareFunctionLess;
-    // 通过将MTLDepthStencilDescriptor的depthWriteEnabled设置为NO来禁止深度写入
-    depthDescriptor.depthWriteEnabled = NO;
-    id <MTLDepthStencilState> depthState = [self.device newDepthStencilStateWithDescriptor:depthDescriptor];
-    
     [commandEncoder setRenderPipelineState:self.screenPipeline];
-    [commandEncoder setDepthStencilState:depthState];
     [commandEncoder setVertexBuffer:self.screenMesh.vertexBuffer offset:0 atIndex:0];
-    
     // TODO
     [commandEncoder setFragmentTexture:self.screenTexture atIndex:0];
-//    [commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
-//    [commandEncoder drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:6];
+    //[commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
     [commandEncoder drawIndexedPrimitives:(MTLPrimitiveTypeTriangle) indexCount:[self.screenMesh.indexBuffer length] / sizeof(UInt16) indexType:MTLIndexTypeUInt16 indexBuffer:self.screenMesh.indexBuffer indexBufferOffset:0];
-
 }
 
-
-// 绘制屏幕
-- (void)drawBallWithCommandEncoder:(id<MTLRenderCommandEncoder>)commandEncoder {
-    [commandEncoder setTriangleFillMode:(MTLTriangleFillModeFill)];
-    [commandEncoder setRenderPipelineState:self.ballPipelineState];
-    [commandEncoder setVertexBuffer:self.ballMesh.vertexBuffer offset:0 atIndex:0];
-    [commandEncoder setFragmentTexture:self.ballTexture atIndex:0];
-    [commandEncoder drawIndexedPrimitives:MTLPrimitiveTypeTriangle indexCount:self.ballMesh.indexCount indexType:self.ballMesh.indexType indexBuffer:self.ballMesh.vertexBuffer indexBufferOffset:0];
-}
 
 // 绘制按钮
 - (void)drawStartWithCommandEncoder:(id<MTLRenderCommandEncoder>)commandEncoder {
-    
-    // 深度缓存器
-    MTLDepthStencilDescriptor *depthDescriptor = [MTLDepthStencilDescriptor new];
-    depthDescriptor.depthCompareFunction = MTLCompareFunctionLess;
-    // 通过将MTLDepthStencilDescriptor的depthWriteEnabled设置为NO来禁止深度写入
-    depthDescriptor.depthWriteEnabled = NO;
-    id <MTLDepthStencilState> depthState = [self.device newDepthStencilStateWithDescriptor:depthDescriptor];
     [commandEncoder setCullMode:(MTLCullModeNone)];
-    [commandEncoder setRenderPipelineState:self.startPipeline];
-    [commandEncoder setDepthStencilState:depthState];
-    [commandEncoder setVertexBuffer:self.startMesh.vertexBuffer offset:0 atIndex:0];
-    
-    // TODO
+    [commandEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
+    [commandEncoder setRenderPipelineState:self.buttonPipeline];
+    [commandEncoder setVertexBuffer:self.startButtonMesh.vertexBuffer offset:0 atIndex:0];
     [commandEncoder setFragmentTexture:self.startTexture atIndex:0];
-     [commandEncoder setFragmentSamplerState:self.samplerState atIndex:0];
-//        [commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
-    //    [commandEncoder drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:6];
-    [commandEncoder drawIndexedPrimitives:(MTLPrimitiveTypeTriangle) indexCount:[self.startMesh.indexBuffer length] / sizeof(UInt16) indexType:MTLIndexTypeUInt16 indexBuffer:self.startMesh.indexBuffer indexBufferOffset:0];
-    
+    [commandEncoder setFragmentSamplerState:self.samplerState atIndex:0];
+//  [commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
+    [commandEncoder drawIndexedPrimitives:(MTLPrimitiveTypeTriangle) indexCount:[self.startButtonMesh.indexBuffer length] / sizeof(UInt16) indexType:MTLIndexTypeUInt16 indexBuffer:self.startButtonMesh.indexBuffer indexBufferOffset:0];
+}
+
+- (void)drawNextWithCommandEncoder:(id<MTLRenderCommandEncoder>)commandEncoder {
+    [commandEncoder setCullMode:(MTLCullModeNone)];
+    [commandEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
+    [commandEncoder setRenderPipelineState:self.buttonPipeline];
+    [commandEncoder setVertexBuffer:self.nextButtonMesh.vertexBuffer offset:0 atIndex:0];
+    [commandEncoder setFragmentTexture:self.nextTexture atIndex:0];
+    [commandEncoder setFragmentSamplerState:self.samplerState atIndex:0];
+    //[commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
+    [commandEncoder drawIndexedPrimitives:(MTLPrimitiveTypeTriangle) indexCount:[self.nextButtonMesh.indexBuffer length] / sizeof(UInt16) indexType:MTLIndexTypeUInt16 indexBuffer:self.nextButtonMesh.indexBuffer indexBufferOffset:0];
+}
+
+- (void)drawPreWithCommandEncoder:(id<MTLRenderCommandEncoder>)commandEncoder {
+    [commandEncoder setCullMode:(MTLCullModeNone)];
+    [commandEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
+    [commandEncoder setRenderPipelineState:self.buttonPipeline];
+    [commandEncoder setVertexBuffer:self.preButtonMesh.vertexBuffer offset:0 atIndex:0];
+    [commandEncoder setFragmentTexture:self.preTexture atIndex:0];
+    [commandEncoder setFragmentSamplerState:self.samplerState atIndex:0];
+    //[commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
+    [commandEncoder drawIndexedPrimitives:(MTLPrimitiveTypeTriangle) indexCount:[self.preButtonMesh.indexBuffer length] / sizeof(UInt16) indexType:MTLIndexTypeUInt16 indexBuffer:self.preButtonMesh.indexBuffer indexBufferOffset:0];
+}
+
+
+- (void)drawProgressWithCommandEncoder:(id<MTLRenderCommandEncoder>)commandEncoder {
+    [commandEncoder setCullMode:(MTLCullModeNone)];
+    [commandEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
+    [commandEncoder setRenderPipelineState:self.buttonPipeline];
+    [commandEncoder setVertexBuffer:self.progressButtonMesh.vertexBuffer offset:0 atIndex:0];
+    [commandEncoder setFragmentTexture:self.progressTexture atIndex:0];
+    [commandEncoder setFragmentSamplerState:self.samplerState atIndex:0];
+    //[commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
+    [commandEncoder drawIndexedPrimitives:(MTLPrimitiveTypeTriangle) indexCount:[self.progressButtonMesh.indexBuffer length] / sizeof(UInt16) indexType:MTLIndexTypeUInt16 indexBuffer:self.progressButtonMesh.indexBuffer indexBufferOffset:0];
+}
+
+- (void)drawRightLabelWithCommandEncoder:(id<MTLRenderCommandEncoder>)commandEncoder {
+    [commandEncoder setCullMode:(MTLCullModeNone)];
+    [commandEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
+    [commandEncoder setRenderPipelineState:self.buttonPipeline];
+    [commandEncoder setVertexBuffer:self.rightLabelMesh.vertexBuffer offset:0 atIndex:0];
+    [commandEncoder setFragmentTexture:self.rightTexture atIndex:0];
+    [commandEncoder setFragmentSamplerState:self.samplerState atIndex:0];
+    //[commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
+    [commandEncoder drawIndexedPrimitives:(MTLPrimitiveTypeTriangle) indexCount:[self.rightLabelMesh.indexBuffer length] / sizeof(UInt16) indexType:MTLIndexTypeUInt16 indexBuffer:self.rightLabelMesh.indexBuffer indexBufferOffset:0];
+}
+
+- (void)drawLeftLabelWithCommandEncoder:(id<MTLRenderCommandEncoder>)commandEncoder {
+    [commandEncoder setCullMode:(MTLCullModeNone)];
+    [commandEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
+    [commandEncoder setRenderPipelineState:self.buttonPipeline];
+    [commandEncoder setVertexBuffer:self.leftLabelMesh.vertexBuffer offset:0 atIndex:0];
+    [commandEncoder setFragmentTexture:self.leftTexture atIndex:0];
+    [commandEncoder setFragmentSamplerState:self.samplerState atIndex:0];
+    //[commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
+    [commandEncoder drawIndexedPrimitives:(MTLPrimitiveTypeTriangle) indexCount:[self.leftLabelMesh.indexBuffer length] / sizeof(UInt16) indexType:MTLIndexTypeUInt16 indexBuffer:self.leftLabelMesh.indexBuffer indexBufferOffset:0];
+}
+
+- (void)drawSpotWithCommandEncoder:(id<MTLRenderCommandEncoder>)commandEncoder {
+    [commandEncoder setCullMode:(MTLCullModeNone)];
+    [commandEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
+    [commandEncoder setRenderPipelineState:self.buttonPipeline];
+    [commandEncoder setVertexBuffer:self.leftLabelMesh.vertexBuffer offset:0 atIndex:0];
+    [commandEncoder setFragmentTexture:self.leftTexture atIndex:0];
+    [commandEncoder setFragmentSamplerState:self.samplerState atIndex:0];
+    //[commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
+    [commandEncoder drawIndexedPrimitives:(MTLPrimitiveTypeTriangle) indexCount:[self.leftLabelMesh.indexBuffer length] / sizeof(UInt16) indexType:MTLIndexTypeUInt16 indexBuffer:self.leftLabelMesh.indexBuffer indexBufferOffset:0];
 }
 
 - (MTLRenderPassDescriptor *)renderPassForDrawable:(id<CAMetalDrawable>)drawable
 {
     MTLRenderPassDescriptor *renderPass = [MTLRenderPassDescriptor renderPassDescriptor];
-    
     renderPass.colorAttachments[0].texture = drawable.texture;
     renderPass.colorAttachments[0].loadAction = MTLLoadActionClear;
     renderPass.colorAttachments[0].storeAction = MTLStoreActionStore;
-    renderPass.colorAttachments[0].clearColor = MTLClearColorMake(1, 1, 1, 1);
-    
+    renderPass.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1);
     renderPass.depthAttachment.texture = self.depthTexture;
     renderPass.depthAttachment.loadAction = MTLLoadActionClear;
     renderPass.depthAttachment.storeAction = MTLStoreActionDontCare;
     renderPass.depthAttachment.clearDepth = 1;
-    
     return renderPass;
 }
 
@@ -333,18 +344,16 @@
 - (void)updateUniforms
 {
     static const vector_float4 cameraPosition = { 0, 0, -4, 1 };
-    
     const CGSize size = self.layer.bounds.size;
     const CGFloat aspectRatio = size.width / size.height;
     const CGFloat verticalFOV = (aspectRatio > 1) ? 60 : 90;
     static const CGFloat near = 0.1;
     static const CGFloat far = 200;
     
-    matrix_float4x4 projectionMatrix = perspective_projection(aspectRatio, verticalFOV * (M_PI / 180), near, far);
-    matrix_float4x4 modelMatrix = identity();
+    matrix_float4x4 projectionMatrix = matrix_perspective_projection(aspectRatio, verticalFOV * (M_PI / 180), near, far);
+    matrix_float4x4 modelMatrix = matrix_identity();
     // 场景位置
     matrix_float4x4 skyboxViewMatrix = self.sceneOrientation;
-//    matrix_float4x4 torusViewMatrix = matrix_multiply(translation(cameraPosition), self.sceneOrientation);
     vector_float4 worldCameraPosition = matrix_multiply(matrix_invert(self.sceneOrientation), -cameraPosition);
     
     SkyUniforms skyboxUniforms;
@@ -386,8 +395,13 @@
         
         [self drawSkyboxWithCommandEncoder:commandEncoder];
         [self drawScreenWithCommandEncoder:commandEncoder];
+        [self drawNextWithCommandEncoder:commandEncoder];
+        [self drawPreWithCommandEncoder:commandEncoder];
         [self drawStartWithCommandEncoder:commandEncoder];
-
+        [self drawProgressWithCommandEncoder:commandEncoder];
+        [self drawRightLabelWithCommandEncoder:commandEncoder];
+        [self drawLeftLabelWithCommandEncoder:commandEncoder];
+        [self drawSpotWithCommandEncoder:commandEncoder];
         
         [commandEncoder endEncoding];
         [commandBuffer presentDrawable:drawable];

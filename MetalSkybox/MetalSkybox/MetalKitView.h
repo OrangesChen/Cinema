@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <MetalKit/MetalKit.h>
 
-@interface MetalKitView : MTKView <MTKViewDelegate>
+@interface MetalKitView : MTKView 
 
 @end

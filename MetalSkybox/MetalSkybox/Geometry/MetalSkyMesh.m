@@ -61,7 +61,9 @@ static uint16_t indices[] =
     if ((self = [super init]))
     {
         _vertexBuffer = [device newBufferWithBytes:vertices length:24 * 8 * sizeof(float) options:0];
+        [_vertexBuffer setLabel:@"SkyVertices"];
         _indexBuffer = [device newBufferWithBytes:indices length:36 * sizeof(uint16_t) options:0];
+        [_indexBuffer setLabel:@"SkyIndices"];
     }
     return self;
 }

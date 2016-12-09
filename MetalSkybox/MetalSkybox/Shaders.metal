@@ -85,6 +85,15 @@ fragment float4 texture_fragment(VertexOut inFrag[[stage_in]], texture2d<float> 
     return rgba;
 };
 
+fragment half4 button_fragment(VertexOut inFrag[[stage_in]], texture2d<float, access::sample> texas[[texture(0)]], sampler textureSample[[sampler(0)]])
+{
+    constexpr sampler defaultSampler;
+    float4 rgba = texas.sample(textureSample, inFrag.st);
+    if (rgba.a < 0.5)
+        discard_fragment();
+    return half4(rgba);
+};
+
 //fragment half4 color_fragment(VertexOut frag [[stage_in]]) {  //1
 //    return half4(frag.color[0], frag.color[1], frag.color[2], frag.color[3]); //2
 //}
