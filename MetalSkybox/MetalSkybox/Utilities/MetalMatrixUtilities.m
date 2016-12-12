@@ -32,6 +32,18 @@ matrix_float4x4 matrix_identity()
     return identity;
 }
 
+matrix_float4x4 translation(vector_float4 t)
+{
+    vector_float4 X = { 1, 0, 0, 0 };
+    vector_float4 Y = { 0, 1, 0, 0 };
+    vector_float4 Z = { 0, 0, 1, 0 };
+    vector_float4 W = { t.x, t.y, t.z, t.w };
+    
+    matrix_float4x4 mat = { X, Y, Z, W };
+    
+    return mat;
+}
+
 matrix_float4x4 matrix_rotation(vector_float3 axis, float angle)
 {
     float c = cos(angle);

@@ -10,7 +10,7 @@
 
 static float vertices[] = {
 
-    //             纹理
+    //   位置         纹理
     -0.5,  0.1,  1,  1, 1,
      0.5,  0.1,  1,  1, 0,
      0.5,  0.6,  1,  0, 0,
@@ -74,10 +74,10 @@ static float rightLabelVertices[] = {
 
 static float spotVertices[] = {
     
-    -0.05, 0.05, 1,  1, 0,
-     0,    0.05, 1,  0, 0,
-     0,    0.00, 1,  0, 1,
-    -0.05, 0.00, 1,  1, 1,
+    -0.2, 0.2,  0,  1, 0,
+     0,   0.2,  0,  0, 0,
+     0,   0.00, 0,  0, 1,
+    -0.2, 0.00, 0,  1, 1,
 };
 
 
@@ -165,9 +165,9 @@ static uint16_t buttonIndices[] =
 {
     if (self = [super init]) {
         _vertexBuffer = [device newBufferWithBytes:leftLabelVertices length:4 * 5 * sizeof(float) options:0];
-        [_vertexBuffer setLabel:@"RightLabelVertices"];
+        [_vertexBuffer setLabel:@"LefttLabelVertices"];
         _indexBuffer = [device newBufferWithBytes:buttonIndices length:6  * sizeof(uint16_t) options:0];
-        [_indexBuffer setLabel:@"RightLabelIndices"];
+        [_indexBuffer setLabel:@"LeftLabelIndices"];
     }
     return self;
 }
@@ -176,9 +176,9 @@ static uint16_t buttonIndices[] =
 {
     if (self = [super init]) {
         _vertexBuffer = [device newBufferWithBytes:spotVertices length:4 * 5 * sizeof(float) options:0];
-        [_vertexBuffer setLabel:@"RightLabelVertices"];
+        [_vertexBuffer setLabel:@"SpotVertices"];
         _indexBuffer = [device newBufferWithBytes:buttonIndices length:6  * sizeof(uint16_t) options:0];
-        [_indexBuffer setLabel:@"RightLabelIndices"];
+        [_indexBuffer setLabel:@"SpotIndices"];
     }
     return self;
 }

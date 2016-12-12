@@ -9,6 +9,8 @@
 @import simd;
 @import Foundation;
 
+matrix_float4x4 translation(vector_float4 t);
+
 /// Returns random float between min and max, inclusive
 float random_float(float min, float max);
 

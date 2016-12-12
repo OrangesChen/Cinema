@@ -20,6 +20,7 @@
 @property (nonatomic, strong) id<MTLRenderPipelineState> skyboxPipeline;
 @property (nonatomic, strong) id<MTLRenderPipelineState> screenPipeline;
 @property (nonatomic, strong) id<MTLRenderPipelineState> buttonPipeline;
+@property (nonatomic, strong) id<MTLRenderPipelineState> spotPipeline;
 @property (nonatomic, strong) id<MTLBuffer> uniformBuffer;
 @property (nonatomic, strong) id<MTLTexture> depthTexture;
 @property (nonatomic, strong) id<MTLTexture> cubeTexture;
@@ -135,6 +136,8 @@
     self.screenPipeline = [self pipeline2DForVertexFunction:@"texture_vertex" fragmentFunction:@"texture_fragment"];
     
     self.buttonPipeline = [self pipeline2DForVertexFunction:@"texture_vertex" fragmentFunction:@"button_fragment"];
+    
+    self.spotPipeline = [self pipeline2DForVertexFunction:@"texture_vertex" fragmentFunction:@"spot_fragment"];
 
 }
 
@@ -318,12 +321,14 @@
 - (void)drawSpotWithCommandEncoder:(id<MTLRenderCommandEncoder>)commandEncoder {
     [commandEncoder setCullMode:(MTLCullModeNone)];
     [commandEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
-    [commandEncoder setRenderPipelineState:self.buttonPipeline];
-    [commandEncoder setVertexBuffer:self.leftLabelMesh.vertexBuffer offset:0 atIndex:0];
-    [commandEncoder setFragmentTexture:self.leftTexture atIndex:0];
+    [commandEncoder setRenderPipelineState:self.spotPipeline];
+    [commandEncoder setVertexBuffer:self.spotMesh.vertexBuffer offset:0 atIndex:0];
+    [commandEncoder setFragmentTexture:self.spotTexture atIndex:0];
+//    [commandEncoder setVertexBuffer:self.uniformBuffer offset:0 atIndex:1];
+    [commandEncoder setFragmentBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:0];
+    [commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
     [commandEncoder setFragmentSamplerState:self.samplerState atIndex:0];
-    //[commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
-    [commandEncoder drawIndexedPrimitives:(MTLPrimitiveTypeTriangle) indexCount:[self.leftLabelMesh.indexBuffer length] / sizeof(UInt16) indexType:MTLIndexTypeUInt16 indexBuffer:self.leftLabelMesh.indexBuffer indexBufferOffset:0];
+    [commandEncoder drawIndexedPrimitives:(MTLPrimitiveTypeTriangle) indexCount:[self.spotMesh.indexBuffer length] / sizeof(UInt16) indexType:MTLIndexTypeUInt16 indexBuffer:self.spotMesh.indexBuffer indexBufferOffset:0];
 }
 
 - (MTLRenderPassDescriptor *)renderPassForDrawable:(id<CAMetalDrawable>)drawable
@@ -355,6 +360,7 @@
     // 场景位置
     matrix_float4x4 skyboxViewMatrix = self.sceneOrientation;
     vector_float4 worldCameraPosition = matrix_multiply(matrix_invert(self.sceneOrientation), -cameraPosition);
+    matrix_float4x4 spotViewMatrix = matrix_multiply(translation(cameraPosition), self.sceneOrientation);
     
     SkyUniforms skyboxUniforms;
     skyboxUniforms.modelMatrix = modelMatrix;
@@ -364,11 +370,13 @@
     skyboxUniforms.worldCameraPosition = worldCameraPosition;
     memcpy(self.uniformBuffer.contents, &skyboxUniforms, sizeof(SkyUniforms));
     
-//    SkyUniforms screenUniform;
-//    screenUniform.modelMatrix = modelMatrix;
-//    screenUniform.projectionMatrix = projectionMatrix;
-//    screenUniform.modelViewProjectionMatrix = matrix_multiply(projectionMatrix, modelMatrix);
-//    memcpy(self.uniformBuffer.contents, &screenUniform, sizeof(screenUniform));
+    SkyUniforms spotUniforms;
+    spotUniforms.modelMatrix = modelMatrix;
+    spotUniforms.projectionMatrix = projectionMatrix;
+    spotUniforms.normalMatrix = matrix_transpose(matrix_invert(spotUniforms.modelMatrix));
+    spotUniforms.modelViewProjectionMatrix = matrix_multiply(projectionMatrix, matrix_multiply(spotViewMatrix, modelMatrix));
+    spotUniforms.worldCameraPosition = worldCameraPosition;
+    memcpy(self.uniformBuffer.contents + sizeof(SkyUniforms), &spotUniforms, sizeof(SkyUniforms));
     
 }
 
