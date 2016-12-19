@@ -9,15 +9,29 @@
 #import <Foundation/Foundation.h>
 #import "MetalMesh.h"
 
+
+#define ScreenX = 0.5;
+#define ScreenY = 0.35;
+#define ScreenZ = 1;
+
+
+
 @interface MetalButtonMesh : MetalMesh
 
+// 屏幕
 - (instancetype)initWithDevice:(id<MTLDevice>) device;
+// 开始按钮
 - (instancetype)initWithStartDevice:(id<MTLDevice>) device;
+// 下一个
 - (instancetype)initWithNextDevice:(id<MTLDevice>) device;
+// 上一个
 - (instancetype)initWithPretDevice:(id<MTLDevice>) device;
+// 进度条
 - (instancetype)initWithProgresstDevice:(id<MTLDevice>) device;
+// 时间label
 - (instancetype)initWithRightLabelDevice:(id<MTLDevice>) device;
 - (instancetype)initWithLeftLabelDevice:(id<MTLDevice>) device;
+// 焦点
 - (instancetype)initWithSpotDevice:(id<MTLDevice>) device;
 
 @end

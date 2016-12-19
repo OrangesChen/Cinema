@@ -47,7 +47,7 @@ struct Uniforms
     float4x4 projectionMatrix;
     float4x4 normalMatrix;
     float4x4 modelViewProjectionMatrix;
-    float4 worldCameraPosition;
+    float4   worldCameraPosition;
 };
 
 // 将纹理坐标设置为立方角的模型空间位置
@@ -89,7 +89,9 @@ fragment half4 button_fragment(VertexOut inFrag[[stage_in]], texture2d<float, ac
 {
     constexpr sampler defaultSampler;
     float4 rgba = texas.sample(textureSample, inFrag.st);
+    // alpha测试
     if (rgba.a < 0.5)
+        // 丢弃未通过的片段
         discard_fragment();
     return half4(rgba);
 };

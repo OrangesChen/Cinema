@@ -59,8 +59,8 @@
         [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:frame];
     }
     
-    UIGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
-    [self.view addGestureRecognizer:tapRecognizer];
+//    UIGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+//    [self.view addGestureRecognizer:tapRecognizer];
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -75,7 +75,7 @@
 
 - (void)tap:(id)sender
 {
-    self.renderer.useRefractionMaterial = !self.renderer.useRefractionMaterial;
+//    self.renderer.useRefractionMaterial = !self.renderer.useRefractionMaterial;
 }
 
 

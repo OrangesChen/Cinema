@@ -15,7 +15,7 @@
     // set the font type and size
     UIFont *font = [UIFont systemFontOfSize:fontSize];
     CGFloat fHeight = 0.0f;
-NSMutableParagraphStyle* paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    NSMutableParagraphStyle* paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     paragraphStyle.lineBreakMode = NSLineBreakByCharWrapping;
     NSDictionary *attribute = @{NSFontAttributeName: font,
                                 NSParagraphStyleAttributeName: paragraphStyle,

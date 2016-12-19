@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "MetalMesh.h"
-@import Metal;
 
 @interface MetalSkyMesh : MetalMesh
+
+//生成天空盒
 - (instancetype)initWithDevice:(id<MTLDevice>) device;
 @end

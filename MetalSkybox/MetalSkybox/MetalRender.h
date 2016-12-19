@@ -7,10 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
-#import <Metal/Metal.h>
-#import <QuartzCore/QuartzCore.h>
-#import <simd/simd.h>
 
 @interface MetalRender : NSObject
 @property (nonatomic, strong) id<MTLDevice> device;
@@ -21,6 +17,7 @@
 @property  (nonatomic, assign) matrix_float4x4 sceneOrientation;
 
 - (instancetype)initWithLayer: (CAMetalLayer *)layer;
+// 绘图
 - (void)draw;
 
 @end

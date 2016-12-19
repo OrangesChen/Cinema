@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <QuartzCore/QuartzCore.h>
+
 
 @interface MetalView : UIView
 @property (nonatomic, readonly) CAMetalLayer *metalLayer;

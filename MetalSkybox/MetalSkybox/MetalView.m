@@ -29,6 +29,7 @@
     
     drawableSize.width *= scale;
     drawableSize.height *= scale;
+
     self.metalLayer.drawableSize = drawableSize;
 }
 

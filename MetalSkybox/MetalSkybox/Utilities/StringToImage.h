@@ -7,11 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
-@import UIKit;
-@import QuartzCore;
+
 
 @interface StringToImage : NSObject
 
+/**
+ *  输入字符串生成图片
+ *
+ *  @param str      字符串
+ *  @param fontSize 字体大小
+ *
+ *  @return 图片
+ */
 +(UIImage *)imageFromString:(NSString*)str withFont: (CGFloat)fontSize;
 
 @end

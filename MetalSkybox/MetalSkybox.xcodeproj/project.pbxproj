@@ -68,6 +68,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E20C50831DFF9590001B19FE /* ShareHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareHeader.pch; path = ../ShareHeader.pch; sourceTree = "<group>"; };
 		E2491B451DF65F7F002BD130 /* MetalButtonMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetalButtonMesh.h; sourceTree = "<group>"; };
 		E2491B461DF65F7F002BD130 /* MetalButtoonMesh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MetalButtoonMesh.m; sourceTree = "<group>"; };
 		E2491B481DF66C59002BD130 /* cinema_0102_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cinema_0102_back.png; sourceTree = "<group>"; };
@@ -195,6 +196,7 @@
 		E24E43791DF5652E005FD866 /* MetalSkybox */ = {
 			isa = PBXGroup;
 			children = (
+				E20C50831DFF9590001B19FE /* ShareHeader.pch */,
 				E24E437D1DF5652E005FD866 /* AppDelegate.h */,
 				E24E437E1DF5652E005FD866 /* AppDelegate.m */,
 				E24E43801DF5652E005FD866 /* ViewController.h */,
@@ -610,6 +612,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = N5R7K6B3AF;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = $SRCROOT/ShareHeader.pch;
 				INFOPLIST_FILE = MetalSkybox/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Dlodlo.TryPlayer;
@@ -622,6 +626,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = N5R7K6B3AF;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = $SRCROOT/ShareHeader.pch;
 				INFOPLIST_FILE = MetalSkybox/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Dlodlo.TryPlayer;

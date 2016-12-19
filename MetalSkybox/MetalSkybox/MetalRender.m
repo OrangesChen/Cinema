@@ -7,14 +7,11 @@
 //
 
 #import "MetalRender.h"
-#import "MetalTextureLoader.h"
-#import "MetalSkyMesh.h"
-#import "MetalMatrixUtilities.h"
-#import "Types.h"
-#import "MetalButtonMesh.h"
-#import "StringToImage.h"
 
-@interface MetalRender()
+
+@interface MetalRender() {
+    vector_float4 position;
+}
 @property (nonatomic, strong) id<MTLCommandQueue> commandQueue;
 @property (nonatomic, strong) id<MTLLibrary> library;
 @property (nonatomic, strong) id<MTLRenderPipelineState> skyboxPipeline;
@@ -27,10 +24,15 @@
 
 // TODO
 @property (nonatomic, strong) id<MTLTexture> screenTexture;
+@property (nonatomic, strong) id<MTLTexture> selectScreenTexture;
 @property (nonatomic, strong) id<MTLTexture> nextTexture;
+@property (nonatomic, strong) id<MTLTexture> selectNextTexture;
 @property (nonatomic, strong) id<MTLTexture> startTexture;
+@property (nonatomic, strong) id<MTLTexture> selectStartTexture;
 @property (nonatomic, strong) id<MTLTexture> preTexture;
+@property (nonatomic, strong) id<MTLTexture> selectPreTexture;
 @property (nonatomic, strong) id<MTLTexture> progressTexture;
+@property (nonatomic, strong) id<MTLTexture> selectProgressTexture;
 @property (nonatomic, strong) id<MTLTexture> rightTexture;
 @property (nonatomic, strong) id<MTLTexture> leftTexture;
 @property (nonatomic, strong) id<MTLTexture> spotTexture;
@@ -82,10 +84,12 @@
                                        fragmentFunctionNamed:(NSString *)fragmentFunctionName
 {
     MTLVertexDescriptor *vertexDescriptor = [MTLVertexDescriptor new];
+    // position
     vertexDescriptor.attributes[0].bufferIndex = 0;
     vertexDescriptor.attributes[0].offset = 0;
     vertexDescriptor.attributes[0].format = MTLVertexFormatFloat4;
     
+    // normal
     vertexDescriptor.attributes[1].offset = sizeof(vector_float4);
     vertexDescriptor.attributes[1].format = MTLVertexFormatFloat4;
     vertexDescriptor.attributes[1].bufferIndex = 0;
@@ -133,11 +137,15 @@
     // 天空盒
     self.skyboxPipeline = [self pipelineForVertexFunctionNamed:@"vertex_skybox"
                                          fragmentFunctionNamed:@"fragment_cube_lookup"];
-    self.screenPipeline = [self pipeline2DForVertexFunction:@"texture_vertex" fragmentFunction:@"texture_fragment"];
     
-    self.buttonPipeline = [self pipeline2DForVertexFunction:@"texture_vertex" fragmentFunction:@"button_fragment"];
+    self.screenPipeline = [self pipeline2DForVertexFunction:@"texture_vertex"
+                                           fragmentFunction:@"texture_fragment"];
     
-    self.spotPipeline = [self pipeline2DForVertexFunction:@"texture_vertex" fragmentFunction:@"spot_fragment"];
+    self.buttonPipeline = [self pipeline2DForVertexFunction:@"texture_vertex"
+                                           fragmentFunction:@"button_fragment"];
+    
+    self.spotPipeline = [self pipeline2DForVertexFunction:@"texture_vertex"
+                                         fragmentFunction:@"spot_fragment"];
 
 }
 
@@ -153,26 +161,31 @@
     // 获取天空盒网格
     self.skybox = [[MetalSkyMesh alloc] initWithDevice:self.device];
     
-    // TODO
     // 屏幕
     self.screenMesh = [[MetalButtonMesh alloc] initWithDevice:self.device];
     self.screenTexture = [MetalTextureLoader texture2DWithImageNamed:@"py" device:self.device];
+    self.selectScreenTexture = [MetalTextureLoader texture2DWithImageNamed:@"px" device:self.device];
     
     // 开始
     self.startButtonMesh = [[MetalButtonMesh alloc] initWithStartDevice:self.device];
     self.startTexture = [MetalTextureLoader texture2DWithImageNamed:@"movie_player_play" device:self.device];
+    self.selectStartTexture = [MetalTextureLoader texture2DWithImageNamed:@"movie_player_play_CLICK" device:self.device];
     
     // 上一首
     self.preButtonMesh = [[MetalButtonMesh alloc] initWithPretDevice:self.device];
     self.preTexture = [MetalTextureLoader texture2DWithImageNamed:@"movie_play_rewind" device:self.device];
+    self.selectPreTexture = [MetalTextureLoader texture2DWithImageNamed:@"movie_play_rewind_CLICK" device:self.device];
     
     // 下一首
     self.nextButtonMesh = [[MetalButtonMesh alloc] initWithNextDevice:self.device];
-    self.nextTexture = [MetalTextureLoader texture2DWithImageNamed:@"movie_play_advance_CLICK" device:self.device];
+    self.nextTexture = [MetalTextureLoader texture2DWithImageNamed:@"movie_play_advance" device:self.device];
+    self.selectNextTexture = [MetalTextureLoader texture2DWithImageNamed:@"movie_play_advance_CLICK" device:self.device];
     
     // 进度条
     self.progressButtonMesh = [[MetalButtonMesh alloc] initWithProgresstDevice:self.device];
     self.progressTexture = [MetalTextureLoader texture2DWithImageNamed:@"movie_rate" device:self.device];
+    self.selectProgressTexture = [MetalTextureLoader texture2DWithImageNamed:@"movie_ratebg" device:self.device];
+    
     // 时间显示
     self.rightLabelMesh = [[MetalButtonMesh alloc] initWithRightLabelDevice:self.device];
     UIImage *image = [StringToImage imageFromString:@"09:58:60" withFont:20];
@@ -187,7 +200,6 @@
     self.spotMesh = [[MetalButtonMesh alloc] initWithSpotDevice:self.device];
     self.spotTexture = [MetalTextureLoader texture2DWithImageNamed:@"spot" device:self.device];
 
-    
     // 设置矩阵数据
     self.uniformBuffer = [self.device newBufferWithLength:sizeof(SkyUniforms) * 2
                                                   options:MTLResourceOptionCPUCacheModeDefault];
@@ -243,8 +255,14 @@
 - (void)drawScreenWithCommandEncoder:(id<MTLRenderCommandEncoder>)commandEncoder {
     [commandEncoder setRenderPipelineState:self.screenPipeline];
     [commandEncoder setVertexBuffer:self.screenMesh.vertexBuffer offset:0 atIndex:0];
-    // TODO
-    [commandEncoder setFragmentTexture:self.screenTexture atIndex:0];
+    float dif = 0.5;
+
+    if (fabs(position.x - 0.11)<= dif && fabs(position.y - 0.13) <= dif/2 && fabs(position.z - 1) <= 0.2 && 1) {
+        [commandEncoder setFragmentTexture:self.screenTexture atIndex:0];
+    } else {
+        [commandEncoder setFragmentTexture:self.selectScreenTexture atIndex:0];
+    }
+//  NSLog(@"x: %f y: %f z: %f", fabs(position.x <= dif), fabs(position.y - 0.35 <= dif), fabs(position.z - 1 <= dif));
     //[commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
     [commandEncoder drawIndexedPrimitives:(MTLPrimitiveTypeTriangle) indexCount:[self.screenMesh.indexBuffer length] / sizeof(UInt16) indexType:MTLIndexTypeUInt16 indexBuffer:self.screenMesh.indexBuffer indexBufferOffset:0];
 }
@@ -256,7 +274,13 @@
     [commandEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
     [commandEncoder setRenderPipelineState:self.buttonPipeline];
     [commandEncoder setVertexBuffer:self.startButtonMesh.vertexBuffer offset:0 atIndex:0];
-    [commandEncoder setFragmentTexture:self.startTexture atIndex:0];
+    float dif = 0.04;
+    if (fabs(position.x - 0.48)<= dif && fabs(position.y + 0.20) <= dif && fabs(position.z - 1) <= 0.2) {
+        [commandEncoder setFragmentTexture:self.selectStartTexture atIndex:0];
+    } else {
+        [commandEncoder setFragmentTexture:self.startTexture atIndex:0];
+    }
+//  NSLog(@"x: %f y: %f z: %f", fabs(position.x - 0.5), fabs(position.y + 0.19), fabs(position.z - 1));
     [commandEncoder setFragmentSamplerState:self.samplerState atIndex:0];
 //  [commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
     [commandEncoder drawIndexedPrimitives:(MTLPrimitiveTypeTriangle) indexCount:[self.startButtonMesh.indexBuffer length] / sizeof(UInt16) indexType:MTLIndexTypeUInt16 indexBuffer:self.startButtonMesh.indexBuffer indexBufferOffset:0];
@@ -267,7 +291,13 @@
     [commandEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
     [commandEncoder setRenderPipelineState:self.buttonPipeline];
     [commandEncoder setVertexBuffer:self.nextButtonMesh.vertexBuffer offset:0 atIndex:0];
-    [commandEncoder setFragmentTexture:self.nextTexture atIndex:0];
+    float dif = 0.04;
+    if (fabs(position.x - 0.4)<= dif && fabs(position.y + 0.22) <= dif && fabs(position.z - 1) <= 0.2) {
+        [commandEncoder setFragmentTexture:self.selectNextTexture atIndex:0];
+    } else {
+        [commandEncoder setFragmentTexture:self.nextTexture atIndex:0];
+    }
+//  NSLog(@"x: %f y: %f z: %f", fabs(position.x - 0.35), fabs(position.y + 0.22), fabs(position.z - 1));
     [commandEncoder setFragmentSamplerState:self.samplerState atIndex:0];
     //[commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
     [commandEncoder drawIndexedPrimitives:(MTLPrimitiveTypeTriangle) indexCount:[self.nextButtonMesh.indexBuffer length] / sizeof(UInt16) indexType:MTLIndexTypeUInt16 indexBuffer:self.nextButtonMesh.indexBuffer indexBufferOffset:0];
@@ -278,7 +308,14 @@
     [commandEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
     [commandEncoder setRenderPipelineState:self.buttonPipeline];
     [commandEncoder setVertexBuffer:self.preButtonMesh.vertexBuffer offset:0 atIndex:0];
-    [commandEncoder setFragmentTexture:self.preTexture atIndex:0];
+    float dif = 0.04;
+    if (fabs(position.x - 0.56)<= dif && fabs(position.y + 0.23) <= dif && fabs(position.z - 1) <= 0.2) {
+        [commandEncoder setFragmentTexture:self.selectPreTexture atIndex:0];
+    } else {
+        [commandEncoder setFragmentTexture:self.preTexture atIndex:0];
+    }
+//  NSLog(@"x: %f y: %f z: %f", fabs(position.x - 0.5), fabs(position.y + 0.22), fabs(position.z - 1));
+//    [commandEncoder setFragmentTexture:self.preTexture atIndex:0];
     [commandEncoder setFragmentSamplerState:self.samplerState atIndex:0];
     //[commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
     [commandEncoder drawIndexedPrimitives:(MTLPrimitiveTypeTriangle) indexCount:[self.preButtonMesh.indexBuffer length] / sizeof(UInt16) indexType:MTLIndexTypeUInt16 indexBuffer:self.preButtonMesh.indexBuffer indexBufferOffset:0];
@@ -290,7 +327,14 @@
     [commandEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
     [commandEncoder setRenderPipelineState:self.buttonPipeline];
     [commandEncoder setVertexBuffer:self.progressButtonMesh.vertexBuffer offset:0 atIndex:0];
-    [commandEncoder setFragmentTexture:self.progressTexture atIndex:0];
+    float dif = 0.5;
+    if (fabs(position.x - 0.15)<= dif && fabs(position.y + 0.14) <= 0.025 && fabs(position.z - 1) <= 0.2) {
+        [commandEncoder setFragmentTexture:self.selectProgressTexture atIndex:0];
+    } else {
+        [commandEncoder setFragmentTexture:self.progressTexture atIndex:0];
+    }
+//    NSLog(@"x: %f y: %f z: %f", fabs(position.x - 0.15), fabs(position.y + 0.14), fabs(position.z - 1));
+//    [commandEncoder setFragmentTexture:self.progressTexture atIndex:0];
     [commandEncoder setFragmentSamplerState:self.samplerState atIndex:0];
     //[commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
     [commandEncoder drawIndexedPrimitives:(MTLPrimitiveTypeTriangle) indexCount:[self.progressButtonMesh.indexBuffer length] / sizeof(UInt16) indexType:MTLIndexTypeUInt16 indexBuffer:self.progressButtonMesh.indexBuffer indexBufferOffset:0];
@@ -324,7 +368,6 @@
     [commandEncoder setRenderPipelineState:self.spotPipeline];
     [commandEncoder setVertexBuffer:self.spotMesh.vertexBuffer offset:0 atIndex:0];
     [commandEncoder setFragmentTexture:self.spotTexture atIndex:0];
-//    [commandEncoder setVertexBuffer:self.uniformBuffer offset:0 atIndex:1];
     [commandEncoder setFragmentBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:0];
     [commandEncoder setVertexBuffer:self.uniformBuffer offset:sizeof(SkyUniforms) atIndex:1];
     [commandEncoder setFragmentSamplerState:self.samplerState atIndex:0];
@@ -359,25 +402,29 @@
     matrix_float4x4 modelMatrix = matrix_identity();
     // 场景位置
     matrix_float4x4 skyboxViewMatrix = self.sceneOrientation;
-    vector_float4 worldCameraPosition = matrix_multiply(matrix_invert(self.sceneOrientation), -cameraPosition);
+//    vector_float4 worldCameraPosition = matrix_multiply(matrix_invert(self.sceneOrientation), -cameraPosition);
     matrix_float4x4 spotViewMatrix = matrix_multiply(translation(cameraPosition), self.sceneOrientation);
     
     SkyUniforms skyboxUniforms;
     skyboxUniforms.modelMatrix = modelMatrix;
     skyboxUniforms.projectionMatrix = projectionMatrix;
-    skyboxUniforms.normalMatrix = matrix_transpose(matrix_invert(skyboxUniforms.modelMatrix));
+//    skyboxUniforms.normalMatrix = matrix_transpose(matrix_invert(skyboxUniforms.modelMatrix));
     skyboxUniforms.modelViewProjectionMatrix = matrix_multiply(projectionMatrix, matrix_multiply(skyboxViewMatrix, modelMatrix));
-    skyboxUniforms.worldCameraPosition = worldCameraPosition;
+//    skyboxUniforms.worldCameraPosition = worldCameraPosition;
     memcpy(self.uniformBuffer.contents, &skyboxUniforms, sizeof(SkyUniforms));
     
     SkyUniforms spotUniforms;
     spotUniforms.modelMatrix = modelMatrix;
     spotUniforms.projectionMatrix = projectionMatrix;
-    spotUniforms.normalMatrix = matrix_transpose(matrix_invert(spotUniforms.modelMatrix));
+//    spotUniforms.normalMatrix = matrix_transpose(matrix_invert(spotUniforms.modelMatrix));
     spotUniforms.modelViewProjectionMatrix = matrix_multiply(projectionMatrix, matrix_multiply(spotViewMatrix, modelMatrix));
-    spotUniforms.worldCameraPosition = worldCameraPosition;
+//    spotUniforms.worldCameraPosition = worldCameraPosition;
     memcpy(self.uniformBuffer.contents + sizeof(SkyUniforms), &spotUniforms, sizeof(SkyUniforms));
     
+    // 获取焦点spot的位置
+    vector_float4 spot = {-0.1, 0.1, 0, 1};
+    position = matrix_multiply(spot, spotUniforms.modelViewProjectionMatrix);
+    //NSLog(@"%f, %f, %f", position.x, position.y, position.z);
 }
 
 
@@ -401,6 +448,7 @@
         [commandEncoder setFrontFacingWinding:MTLWindingCounterClockwise];
         [commandEncoder setCullMode:MTLCullModeBack];
         
+        // 绘制
         [self drawSkyboxWithCommandEncoder:commandEncoder];
         [self drawScreenWithCommandEncoder:commandEncoder];
         [self drawNextWithCommandEncoder:commandEncoder];
