@@ -25,6 +25,7 @@
 		E2491B771DF6AD7B002BD130 /* movie_rate.png in Resources */ = {isa = PBXBuildFile; fileRef = E2491B6D1DF6AD7B002BD130 /* movie_rate.png */; };
 		E2491B781DF6AD7B002BD130 /* movie_ratebg.png in Resources */ = {isa = PBXBuildFile; fileRef = E2491B6E1DF6AD7B002BD130 /* movie_ratebg.png */; };
 		E24C359F1DF95AFB001E1950 /* spot.png in Resources */ = {isa = PBXBuildFile; fileRef = E24C359E1DF95AFB001E1950 /* spot.png */; };
+		E24D51AD1E10C4B100553B39 /* DvrPlayerIosLib.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E2A912E41E10B85F00331A20 /* DvrPlayerIosLib.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E24E437C1DF5652E005FD866 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E437B1DF5652E005FD866 /* main.m */; };
 		E24E437F1DF5652E005FD866 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E437E1DF5652E005FD866 /* AppDelegate.m */; };
 		E24E43821DF5652E005FD866 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E43811DF5652E005FD866 /* ViewController.m */; };
@@ -34,7 +35,6 @@
 		E24E43951DF5652E005FD866 /* MetalSkyboxTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E43941DF5652E005FD866 /* MetalSkyboxTests.m */; };
 		E24E43A01DF5652E005FD866 /* MetalSkyboxUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E439F1DF5652E005FD866 /* MetalSkyboxUITests.m */; };
 		E24E43B11DF56824005FD866 /* MetalView.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E43B01DF56824005FD866 /* MetalView.m */; };
-		E24E43B41DF56957005FD866 /* MetalKitView.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E43B31DF56957005FD866 /* MetalKitView.m */; };
 		E24E43B71DF56A2B005FD866 /* MetalRender.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E43B61DF56A2B005FD866 /* MetalRender.m */; };
 		E24E43BD1DF56BD5005FD866 /* MetalTextureLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E43BC1DF56BD5005FD866 /* MetalTextureLoader.m */; };
 		E24E43C01DF56BEA005FD866 /* MetalMatrixUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E43BF1DF56BEA005FD866 /* MetalMatrixUtilities.m */; };
@@ -47,6 +47,16 @@
 		E24E43D21DF574D8005FD866 /* px.png in Resources */ = {isa = PBXBuildFile; fileRef = E24E43CC1DF574D8005FD866 /* px.png */; };
 		E24E43D31DF574D8005FD866 /* py.png in Resources */ = {isa = PBXBuildFile; fileRef = E24E43CD1DF574D8005FD866 /* py.png */; };
 		E24E43D41DF574D8005FD866 /* pz.png in Resources */ = {isa = PBXBuildFile; fileRef = E24E43CE1DF574D8005FD866 /* pz.png */; };
+		E26F5D721E12520C007BB53B /* 1.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = E26F5D711E12520C007BB53B /* 1.mp4 */; };
+		E26F5D741E125499007BB53B /* 2.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = E26F5D731E125499007BB53B /* 2.mp4 */; };
+		E27B5FD31E1B7E730028A454 /* Sphere.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B5FD21E1B7E730028A454 /* Sphere.m */; };
+		E27B5FD61E1B8A430028A454 /* MetalSphereMesh.m in Sources */ = {isa = PBXBuildFile; fileRef = E27B5FD51E1B8A430028A454 /* MetalSphereMesh.m */; };
+		E2961A6C1E10B67800A8CD8F /* GetVedioTexture.mm in Sources */ = {isa = PBXBuildFile; fileRef = E2961A6B1E10B67800A8CD8F /* GetVedioTexture.mm */; };
+		E2961A781E10B6AD00A8CD8F /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E2961A771E10B6AD00A8CD8F /* libbz2.tbd */; };
+		E2961A7A1E10B6B800A8CD8F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E2961A791E10B6B800A8CD8F /* libz.tbd */; };
+		E2A912EA1E10B85F00331A20 /* DvrPlayerIosLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2A912E41E10B85F00331A20 /* DvrPlayerIosLib.framework */; };
+		E2A912EB1E10B85F00331A20 /* IJKMediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2A912E51E10B85F00331A20 /* IJKMediaFramework.framework */; };
+		E2A912EC1E10B85F00331A20 /* MatrixState.m in Sources */ = {isa = PBXBuildFile; fileRef = E2A912E81E10B85F00331A20 /* MatrixState.m */; };
 		E2F43A901DFA8D7800C2BBA6 /* StringToImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F43A8F1DFA8D7800C2BBA6 /* StringToImage.m */; };
 /* End PBXBuildFile section */
 
@@ -66,6 +76,20 @@
 			remoteInfo = MetalSkybox;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E2961A7D1E10B7F900A8CD8F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E24D51AD1E10C4B100553B39 /* DvrPlayerIosLib.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		E20C50831DFF9590001B19FE /* ShareHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareHeader.pch; path = ../ShareHeader.pch; sourceTree = "<group>"; };
@@ -104,11 +128,9 @@
 		E24E439B1DF5652E005FD866 /* MetalSkyboxUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MetalSkyboxUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E24E439F1DF5652E005FD866 /* MetalSkyboxUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MetalSkyboxUITests.m; sourceTree = "<group>"; };
 		E24E43A11DF5652E005FD866 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E24E43AD1DF565DC005FD866 /* Types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Types.h; sourceTree = "<group>"; };
+		E24E43AD1DF565DC005FD866 /* Types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Types.h; path = ../Types.h; sourceTree = "<group>"; };
 		E24E43AF1DF56824005FD866 /* MetalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetalView.h; sourceTree = "<group>"; };
 		E24E43B01DF56824005FD866 /* MetalView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MetalView.m; sourceTree = "<group>"; };
-		E24E43B21DF56957005FD866 /* MetalKitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetalKitView.h; sourceTree = "<group>"; };
-		E24E43B31DF56957005FD866 /* MetalKitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MetalKitView.m; sourceTree = "<group>"; };
 		E24E43B51DF56A2B005FD866 /* MetalRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetalRender.h; sourceTree = "<group>"; };
 		E24E43B61DF56A2B005FD866 /* MetalRender.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MetalRender.m; sourceTree = "<group>"; };
 		E24E43BB1DF56BD5005FD866 /* MetalTextureLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetalTextureLoader.h; sourceTree = "<group>"; };
@@ -126,6 +148,20 @@
 		E24E43CC1DF574D8005FD866 /* px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = px.png; sourceTree = "<group>"; };
 		E24E43CD1DF574D8005FD866 /* py.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = py.png; sourceTree = "<group>"; };
 		E24E43CE1DF574D8005FD866 /* pz.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pz.png; sourceTree = "<group>"; };
+		E26F5D711E12520C007BB53B /* 1.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = 1.mp4; sourceTree = "<group>"; };
+		E26F5D731E125499007BB53B /* 2.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = 2.mp4; sourceTree = "<group>"; };
+		E27B5FD11E1B7E730028A454 /* Sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sphere.h; sourceTree = "<group>"; };
+		E27B5FD21E1B7E730028A454 /* Sphere.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sphere.m; sourceTree = "<group>"; };
+		E27B5FD41E1B8A430028A454 /* MetalSphereMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetalSphereMesh.h; sourceTree = "<group>"; };
+		E27B5FD51E1B8A430028A454 /* MetalSphereMesh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MetalSphereMesh.m; sourceTree = "<group>"; };
+		E2961A6A1E10B67800A8CD8F /* GetVedioTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetVedioTexture.h; sourceTree = "<group>"; };
+		E2961A6B1E10B67800A8CD8F /* GetVedioTexture.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GetVedioTexture.mm; sourceTree = "<group>"; };
+		E2961A771E10B6AD00A8CD8F /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
+		E2961A791E10B6B800A8CD8F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		E2A912E41E10B85F00331A20 /* DvrPlayerIosLib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DvrPlayerIosLib.framework; sourceTree = "<group>"; };
+		E2A912E51E10B85F00331A20 /* IJKMediaFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IJKMediaFramework.framework; sourceTree = "<group>"; };
+		E2A912E71E10B85F00331A20 /* MatrixState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatrixState.h; sourceTree = "<group>"; };
+		E2A912E81E10B85F00331A20 /* MatrixState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatrixState.m; sourceTree = "<group>"; };
 		E2F43A8E1DFA8D7800C2BBA6 /* StringToImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringToImage.h; sourceTree = "<group>"; };
 		E2F43A8F1DFA8D7800C2BBA6 /* StringToImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringToImage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -135,6 +171,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2A912EA1E10B85F00331A20 /* DvrPlayerIosLib.framework in Frameworks */,
+				E2961A7A1E10B6B800A8CD8F /* libz.tbd in Frameworks */,
+				E2A912EB1E10B85F00331A20 /* IJKMediaFramework.framework in Frameworks */,
+				E2961A781E10B6AD00A8CD8F /* libbz2.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,10 +216,14 @@
 		E24E436E1DF5652E005FD866 = {
 			isa = PBXGroup;
 			children = (
+				E26F5D711E12520C007BB53B /* 1.mp4 */,
+				E26F5D731E125499007BB53B /* 2.mp4 */,
+				E2A912E31E10B85F00331A20 /* DvrPlayerVRFrameworkIos */,
 				E24E43791DF5652E005FD866 /* MetalSkybox */,
 				E24E43931DF5652E005FD866 /* MetalSkyboxTests */,
 				E24E439E1DF5652E005FD866 /* MetalSkyboxUITests */,
 				E24E43781DF5652E005FD866 /* Products */,
+				E2961A761E10B6AD00A8CD8F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -201,13 +245,14 @@
 				E24E437E1DF5652E005FD866 /* AppDelegate.m */,
 				E24E43801DF5652E005FD866 /* ViewController.h */,
 				E24E43811DF5652E005FD866 /* ViewController.m */,
-				E24E43AD1DF565DC005FD866 /* Types.h */,
 				E24E43AF1DF56824005FD866 /* MetalView.h */,
 				E24E43B01DF56824005FD866 /* MetalView.m */,
-				E24E43B21DF56957005FD866 /* MetalKitView.h */,
-				E24E43B31DF56957005FD866 /* MetalKitView.m */,
 				E24E43B51DF56A2B005FD866 /* MetalRender.h */,
 				E24E43B61DF56A2B005FD866 /* MetalRender.m */,
+				E2961A6A1E10B67800A8CD8F /* GetVedioTexture.h */,
+				E2961A6B1E10B67800A8CD8F /* GetVedioTexture.mm */,
+				E27B5FD11E1B7E730028A454 /* Sphere.h */,
+				E27B5FD21E1B7E730028A454 /* Sphere.m */,
 				E24E43C71DF572A2005FD866 /* Shaders.metal */,
 				E24E43BA1DF56BB8005FD866 /* Utilities */,
 				E24E43B81DF56BB8005FD866 /* Geometry */,
@@ -256,6 +301,8 @@
 				E24E43C51DF56C15005FD866 /* MetalSkyMesh.m */,
 				E2491B451DF65F7F002BD130 /* MetalButtonMesh.h */,
 				E2491B461DF65F7F002BD130 /* MetalButtoonMesh.m */,
+				E27B5FD41E1B8A430028A454 /* MetalSphereMesh.h */,
+				E27B5FD51E1B8A430028A454 /* MetalSphereMesh.m */,
 			);
 			path = Geometry;
 			sourceTree = "<group>";
@@ -283,6 +330,7 @@
 		E24E43BA1DF56BB8005FD866 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				E24E43AD1DF565DC005FD866 /* Types.h */,
 				E24E43BB1DF56BD5005FD866 /* MetalTextureLoader.h */,
 				E24E43BC1DF56BD5005FD866 /* MetalTextureLoader.m */,
 				E24E43BE1DF56BEA005FD866 /* MetalMatrixUtilities.h */,
@@ -291,6 +339,34 @@
 				E2F43A8F1DFA8D7800C2BBA6 /* StringToImage.m */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		E2961A761E10B6AD00A8CD8F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E2961A791E10B6B800A8CD8F /* libz.tbd */,
+				E2961A771E10B6AD00A8CD8F /* libbz2.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E2A912E31E10B85F00331A20 /* DvrPlayerVRFrameworkIos */ = {
+			isa = PBXGroup;
+			children = (
+				E2A912E41E10B85F00331A20 /* DvrPlayerIosLib.framework */,
+				E2A912E51E10B85F00331A20 /* IJKMediaFramework.framework */,
+				E2A912E61E10B85F00331A20 /* object-c */,
+			);
+			path = DvrPlayerVRFrameworkIos;
+			sourceTree = "<group>";
+		};
+		E2A912E61E10B85F00331A20 /* object-c */ = {
+			isa = PBXGroup;
+			children = (
+				E2A912E71E10B85F00331A20 /* MatrixState.h */,
+				E2A912E81E10B85F00331A20 /* MatrixState.m */,
+			);
+			path = "object-c";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -303,6 +379,7 @@
 				E24E43731DF5652E005FD866 /* Sources */,
 				E24E43741DF5652E005FD866 /* Frameworks */,
 				E24E43751DF5652E005FD866 /* Resources */,
+				E2961A7D1E10B7F900A8CD8F /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -355,12 +432,12 @@
 		E24E436F1DF5652E005FD866 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = Dlodlo;
 				TargetAttributes = {
 					E24E43761DF5652E005FD866 = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = N5R7K6B3AF;
+						DevelopmentTeam = 4JUJEVR2BH;
 						ProvisioningStyle = Automatic;
 					};
 					E24E438F1DF5652E005FD866 = {
@@ -403,6 +480,7 @@
 				E2491B4F1DF66C59002BD130 /* cinema_0102_down.png in Resources */,
 				E2491B711DF6AD7B002BD130 /* movie_play_pause.png in Resources */,
 				E2491B721DF6AD7B002BD130 /* movie_play_pause_CLICK.png in Resources */,
+				E26F5D741E125499007BB53B /* 2.mp4 in Resources */,
 				E2491B531DF66C59002BD130 /* cinema_0102_up.png in Resources */,
 				E2491B4E1DF66C59002BD130 /* cinema_0102_back.png in Resources */,
 				E2491B731DF6AD7B002BD130 /* movie_play_rewind.png in Resources */,
@@ -421,6 +499,7 @@
 				E2491B701DF6AD7B002BD130 /* movie_play_advance_CLICK.png in Resources */,
 				E24C359F1DF95AFB001E1950 /* spot.png in Resources */,
 				E24E43851DF5652E005FD866 /* Main.storyboard in Resources */,
+				E26F5D721E12520C007BB53B /* 1.mp4 in Resources */,
 				E24E43CF1DF574D8005FD866 /* nx.png in Resources */,
 				E2491B521DF66C59002BD130 /* cinema_0102_right.png in Resources */,
 				E2491B501DF66C59002BD130 /* cinema_0102_front.png in Resources */,
@@ -451,9 +530,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				E24E43B11DF56824005FD866 /* MetalView.m in Sources */,
-				E24E43B41DF56957005FD866 /* MetalKitView.m in Sources */,
 				E24E43821DF5652E005FD866 /* ViewController.m in Sources */,
 				E2491B471DF65F7F002BD130 /* MetalButtoonMesh.m in Sources */,
+				E27B5FD61E1B8A430028A454 /* MetalSphereMesh.m in Sources */,
+				E27B5FD31E1B7E730028A454 /* Sphere.m in Sources */,
 				E2F43A901DFA8D7800C2BBA6 /* StringToImage.m in Sources */,
 				E24E437F1DF5652E005FD866 /* AppDelegate.m in Sources */,
 				E24E437C1DF5652E005FD866 /* main.m in Sources */,
@@ -462,7 +542,9 @@
 				E24E43BD1DF56BD5005FD866 /* MetalTextureLoader.m in Sources */,
 				E24E43C81DF572A2005FD866 /* Shaders.metal in Sources */,
 				E24E43C31DF56C05005FD866 /* MetalMesh.m in Sources */,
+				E2961A6C1E10B67800A8CD8F /* GetVedioTexture.mm in Sources */,
 				E24E43B71DF56A2B005FD866 /* MetalRender.m in Sources */,
+				E2A912EC1E10B85F00331A20 /* MatrixState.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -535,6 +617,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -583,6 +666,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -611,7 +695,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = N5R7K6B3AF;
+				DEVELOPMENT_TEAM = 4JUJEVR2BH;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DvrPlayerVRFrameworkIos",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = $SRCROOT/ShareHeader.pch;
 				INFOPLIST_FILE = MetalSkybox/Info.plist;
@@ -625,7 +713,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = N5R7K6B3AF;
+				DEVELOPMENT_TEAM = 4JUJEVR2BH;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DvrPlayerVRFrameworkIos",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = $SRCROOT/ShareHeader.pch;
 				INFOPLIST_FILE = MetalSkybox/Info.plist;

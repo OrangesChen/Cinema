@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "9B489ECB8E8C9A2D6A90309D108585DF26D05C26",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "251FFFF06488A520632E912293865FC2861F1C64" : 9223372036854775807,
+    "9B489ECB8E8C9A2D6A90309D108585DF26D05C26" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "D8CC92F9-E8AF-4941-9AA0-52B8B7EDD0DA",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "251FFFF06488A520632E912293865FC2861F1C64" : "MetalVideo\/",
+    "9B489ECB8E8C9A2D6A90309D108585DF26D05C26" : "Cinema\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "MetalSkybox",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "MetalSkybox\/MetalSkybox.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/OrangesChen\/MetalVideo.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "251FFFF06488A520632E912293865FC2861F1C64"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/OrangesChen\/Cinema.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9B489ECB8E8C9A2D6A90309D108585DF26D05C26"
+    }
+  ]
+}

@@ -42,12 +42,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MetalSkybox/MetalRender.m"
-            timestampString = "503289736.930768"
+            timestampString = "504775597.859373"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "280"
-            endingLineNumber = "280"
-            landmarkName = "-drawStartWithCommandEncoder:"
+            startingLineNumber = "402"
+            endingLineNumber = "402"
+            landmarkName = "-drawRightLabelWithCommandEncoder:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MetalSkybox/MetalRender.m"
+            timestampString = "504775947.253859"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
+            landmarkName = "-drawScreenWithCommandEncoder:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

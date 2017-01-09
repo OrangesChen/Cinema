@@ -1,4 +1,5 @@
-@import simd;
+
+#import <simd/simd.h>
 
 typedef struct
 {

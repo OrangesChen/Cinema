@@ -26,11 +26,12 @@
     }
     
     CGSize drawableSize = self.bounds.size;
-    
     drawableSize.width *= scale;
     drawableSize.height *= scale;
 
     self.metalLayer.drawableSize = drawableSize;
+    // 这个属性必须设置，否则渲染出的视频颜色会蒙上白色背景
+    self.backgroundColor = nil;
 }
 
 @end

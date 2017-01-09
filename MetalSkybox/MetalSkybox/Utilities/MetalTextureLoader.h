@@ -33,4 +33,6 @@
  */
 + (id<MTLTexture>)textureCubeWithImagesNamed:(NSArray *)imageNameArray device:(id<MTLDevice>)device;
 
++ (id<MTLTexture>)texture2DWithStringToImage:(NSString *)string device:(id<MTLDevice>)device withFont:(CGFloat)font;
+
 @end

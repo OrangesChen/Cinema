@@ -70,6 +70,27 @@
     return texture;
 }
 
++ (id<MTLTexture>)texture2DWithStringToImage:(NSString *)string device:(id<MTLDevice>)device withFont:(CGFloat)font
+{
+    UIImage *image = [StringToImage imageFromString:string withFont:font];
+    CGSize imageSize = CGSizeMake(image.size.width * image.scale, image.size.height * image.scale);
+    const NSUInteger bytesPerPixel = 4;
+    const NSUInteger bytesPerRow = bytesPerPixel * imageSize.width;
+    uint8_t *imageData = [self dataForImage:image];
+    
+    MTLTextureDescriptor *textureDescriptor = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm
+                                                                                                 width:imageSize.width
+                                                                                                height:imageSize.height
+                                                                                             mipmapped:NO];
+    id<MTLTexture> texture = [device newTextureWithDescriptor:textureDescriptor];
+    
+    MTLRegion region = MTLRegionMake2D(0, 0, imageSize.width, imageSize.height);
+    [texture replaceRegion:region mipmapLevel:0 withBytes:imageData bytesPerRow:bytesPerRow];
+    
+    free(imageData);
+    return texture;
+}
+
 // 立方体纹理贴图
 + (id<MTLTexture>)textureCubeWithImagesNamed:(NSArray *)imageNameArray device:(id<MTLDevice>)device {
     NSAssert(imageNameArray.count == 6, @"Cube textures can only be created from exactly six images");

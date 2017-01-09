@@ -7,8 +7,6 @@
 //
 
 
-@import Foundation;
-
 matrix_float4x4 translation(vector_float4 t);
 
 /// Returns random float between min and max，返回最大值和最小值之间的随机浮点数

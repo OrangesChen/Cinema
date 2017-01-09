@@ -9,13 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "MetalMesh.h"
 
-
-#define ScreenX = 0.5;
-#define ScreenY = 0.35;
-#define ScreenZ = 1;
-
-
-
 @interface MetalButtonMesh : MetalMesh
 
 // 屏幕

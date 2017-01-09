@@ -9,13 +9,6 @@
 #include <metal_stdlib>
 using namespace metal;
 
-// some common indices of refraction
-constant float kEtaAir = 1.000277;
-//constant float kEtaWater = 1.333;
-constant float kEtaGlass = 1.5;
-
-constant float kEtaRatio = kEtaAir / kEtaGlass;
-
 struct Vertex
 {
     packed_float4 position [[attribute(0)]];
@@ -106,44 +99,6 @@ fragment half4 spot_fragment(VertexOut inFrag[[stage_in]], texture2d<float, acce
     return half4(rgba);
 };
 
-vertex ProjectedVertex vertex_reflect(device Vertex *vertices     [[buffer(0)]],
-                                      constant Uniforms &uniforms [[buffer(1)]],
-                                      uint vid                    [[vertex_id]])
-{
-    float4 modelPosition = vertices[vid].position;
-    float4 modelNormal = vertices[vid].normal;
-    
-    float4 worldCameraPosition = uniforms.worldCameraPosition;
-    float4 worldPosition = uniforms.modelMatrix * modelPosition;
-    float4 worldNormal = normalize(uniforms.normalMatrix * modelNormal);
-    float4 worldEyeDirection = normalize(worldPosition - worldCameraPosition);
-    
-    ProjectedVertex outVert;
-    outVert.position = uniforms.modelViewProjectionMatrix * modelPosition;
-    outVert.texCoords = reflect(worldEyeDirection, worldNormal);
-    
-    return outVert;
-}
-
-vertex ProjectedVertex vertex_refract(device Vertex *vertices     [[buffer(0)]],
-                                      constant Uniforms &uniforms [[buffer(1)]],
-                                      uint vid                    [[vertex_id]])
-{
-    float4 modelPosition = vertices[vid].position;
-    float4 modelNormal = vertices[vid].normal;
-    
-    float4 worldCameraPosition = uniforms.worldCameraPosition;
-    float4 worldPosition = uniforms.modelMatrix * modelPosition;
-    float4 worldNormal = normalize(uniforms.normalMatrix * modelNormal);
-    float4 worldEyeDirection = normalize(worldPosition - worldCameraPosition);
-    
-    ProjectedVertex outVert;
-    outVert.position = uniforms.modelViewProjectionMatrix * modelPosition;
-    outVert.texCoords = refract(worldEyeDirection, worldNormal, kEtaRatio);
-    
-    return outVert;
-}
-
 fragment half4 fragment_cube_lookup(ProjectedVertex vert          [[stage_in]],
                                     constant Uniforms &uniforms   [[buffer(0)]],
                                     texturecube<half> cubeTexture [[texture(0)]],
@@ -151,5 +106,27 @@ fragment half4 fragment_cube_lookup(ProjectedVertex vert          [[stage_in]],
 {
     float3 texCoords = float3(vert.texCoords.x, vert.texCoords.y, -vert.texCoords.z);
     return cubeTexture.sample(cubeSampler, texCoords);
+};
+
+#define YUV_SHADER_ARGS  VertexOut      inFrag    [[ stage_in ]],\
+texture2d<float>  lumaTex     [[ texture(0) ]],\
+texture2d<float>  chromaTex     [[ texture(1) ]],\
+sampler bilinear [[ sampler(0) ]], \
+constant ColorParameters *colorParameters [[ buffer(1) ]]
+
+struct ColorParameters
+{
+    float3x3 yuvToRGB;
+};
+
+fragment half4 yuv_rgb(YUV_SHADER_ARGS)
+{
+    float3 yuv;
+    yuv.x = lumaTex.sample(bilinear, inFrag.st).r;
+    yuv.yz = chromaTex.sample(bilinear,inFrag.st).rg - float2(0.5);
+    return half4(half3(colorParameters->yuvToRGB * yuv),yuv.x);
 }
+
+
+
 
