@@ -1,2 +1,2 @@
 # Cinema
-Use Metal to draw a Cinema 
+Use Metal or GLKit to draw a Cinema 
